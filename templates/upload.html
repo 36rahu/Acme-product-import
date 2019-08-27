@@ -1,0 +1,66 @@
+<!doctype html>
+<title>Acme Product Upload</title>
+<h2>Select a file to upload</h2>
+<p>
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		<ul class=flashes>
+		{% for message in messages %}
+		  <li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+</p>
+<form method="post" action="upload/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="file" name="file" autocomplete="off" required>
+		</p>
+    </dl>
+    <p>
+		<input type="submit" value="Submit">
+	</p>
+	<progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+  	<h3 id="status"></h3>
+  	<p id="loaded_n_total"></p>
+</form>
+
+
+<script type="text/javascript">
+	
+	var source = new EventSource("{{ url_for('sse.stream') }}");
+
+	source.addEventListener('greeting', function(event) {
+        var data = JSON.parse(event.data);
+        // alert("The server says " + data.message);
+        _("loaded_n_total").innerHTML = "Uploaded " +  data.message;
+  		var percent = data.message;
+  		_("progressBar").value = Math.round(percent);
+  		_("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+    }, false);
+
+	function _(el) {
+  		return document.getElementById(el);
+	}
+
+	function progressHandler(event) {
+	  _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
+	  var percent = (event.loaded / event.total) * 100;
+	  _("progressBar").value = Math.round(percent);
+	  _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+	}
+
+	function completeHandler(event) {
+	  _("status").innerHTML = event.target.responseText;
+	  _("progressBar").value = 0; //wil clear progress bar after successful upload
+	}
+
+	function errorHandler(event) {
+	  _("status").innerHTML = "Upload Failed";
+	}
+
+	function abortHandler(event) {
+	  _("status").innerHTML = "Upload Aborted";
+	}
+</script>

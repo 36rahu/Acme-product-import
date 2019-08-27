@@ -5,3 +5,5 @@ __author__ = 'Rahul K P'
 
 ACTIVE = 'ACTIVE'
 INACTIVE = 'INACTIVE'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
+UPLOAD_FOLDER = 'uploads/'
