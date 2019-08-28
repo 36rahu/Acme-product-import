@@ -7,3 +7,5 @@ ACTIVE = 'ACTIVE'
 INACTIVE = 'INACTIVE'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
 UPLOAD_FOLDER = 'uploads/'
+SPLIT_CON = 500
+PER_PAGE = 100
