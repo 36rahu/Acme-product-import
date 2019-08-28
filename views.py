@@ -13,6 +13,7 @@ import numpy as np
 from constants import PER_PAGE
 from utils import allowed_file
 from models import Products
+from products_management import add_product
 
 views = Blueprint('views', __name__)
 
@@ -51,6 +52,23 @@ def get_products_list():
 def get_products():
     return render_template('products.html')
 
+@views.route('/products/delete/', methods=['GET', 'POST'])
+def delete_products():
+    if request.method == 'POST':
+        try:
+            num_rows_deleted = db.session.query(Products).delete()
+            db.session.commit()
+            flash('All products deleted successfully')
+        except:
+            db.session.rollback()
+            flash('Products deletion failed')
+    return render_template('products_delete.html')
 
 
+@views.route('/products/add/', methods=['POST', 'GET'])
+def add_products():
+    if request.method == 'POST':
+        res = add_product(request.form)
+        flash(res.get('msg'))
+    return render_template('product_add.html')
 
