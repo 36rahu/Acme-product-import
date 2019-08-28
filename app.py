@@ -3,8 +3,6 @@ __author__ = 'Rahul K P'
 
 from time import sleep
 import os
-# Remove this
-from os import path
 import urllib.request
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
