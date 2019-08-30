@@ -24,3 +24,13 @@ class Products(ModelBaseClass, db.Model):
     sku = db.Column(db.VARCHAR(length=64), nullable=False, primary_key=True)
     name = db.Column(db.VARCHAR(length=64), nullable=False)
     description = db.Column(db.Text, nullable=False)
+
+class Webhooks(db.Model):
+    __tablename__ = 'webhooks'
+
+    id = db.Column(db.INTEGER, nullable=False, primary_key=True)
+    event = db.Column(db.VARCHAR(length=64), nullable=False)
+    endpoint = db.Column(db.VARCHAR(length=64), nullable=False)
+    method = db.Column(db.VARCHAR(length=64), nullable=False)
+    host = db.Column(db.VARCHAR(length=100), nullable=False)
+    extra_paylod = db.Column(db.JSON, nullable=True)
