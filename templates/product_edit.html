@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Update new product</h3>
+      {% if data %}
+      <form method="post" action="/product/edit/{{ data.sku }}/">
+        <div class="form-group col-sm-6">
+          <label for="exampleFormControlInput1">SKU</label>
+          <input type="text" class="form-control" id="sku" placeholder="SKU" name="sku" value="{{ data.sku }}" readonly>
+        </div>
+        <div class="form-group col-sm-6">
+          <label for="exampleFormControlInput1">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Name" name="name" value="{{ data.name }}">
+        </div>
+        <div class="form-group col-sm-6">
+          <label for="exampleFormControlInput1">Description</label>
+          <input type="text" class="form-control" id="description" placeholder="Description" name="description" value="{{ data.description }}">
+        </div>
+        <div class="form-group col-sm-6">
+          <label for="exampleFormControlInput1">Status</label>
+          <input type="text" class="form-control" id="status" placeholder="Status" name="status" value="{{ data.status }}">
+        </div>
+        <button type="submit" class="btn btn-primary" value="submit">Submit</button>
+      </form>
+      {% endif %}
+      <p>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <ul class=flashes>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+          {% endif %}
+        {% endwith %}
+      </p>
+  </div>
+  </body>
+</html>

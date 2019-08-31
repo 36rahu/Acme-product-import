@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<head>
+<title>Acme Product Upload</title>
+ <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="/static/css/upload.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body id="body">
+
+	<div class="uploadPage">
+	
+		<h2 class="heading">Select a file to upload</h2>
+	
+		<p class="listContents">
+			{% with messages = get_flashed_messages() %}
+			  {% if messages %}
+	
+				<ul class="flashes">
+				{% for message in messages %}
+	
+				  <li>{{ message }}</li>
+	
+				{% endfor %}
+	
+				</ul>
+		
+			  {% endif %}
+			{% endwith %}
+		
+		</p>
+		
+		<form method="post" action="upload/" enctype="multipart/form-data">
+		    <div style="position:relative; width: 112px; margin-right: auto; margin-left: auto;">
+				<a class='btn btn-primary' href='javascript:;'>
+					Choose File...
+					<input type="file" id="file-source" style='position:absolute;z-index:2;top:0;left:0; width: 112px;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file" size="40"  onchange='$("#upload-file-info").html(document.getElementById("file-source").files[0].name);'>
+				</a>
+				&nbsp;
+				<span class='label label-info' id="upload-file-info"></span>
+			</div>
+		    <p class="submitButton">
+				<input type="submit" value="Submit" class="btn btn-primary" style="font-size: 20px; padding: 5px 30px; font-weight: bold;">
+			</p>
+			<br/>
+			<progress id="progressBar" value="0" max="100" style="width:350px;"></progress>
+		  	<h3 id="status"></h3>
+		</form>
+ 
+
+		<script type="text/javascript">
+			
+			var source = new EventSource("{{ url_for('sse.stream') }}");
+
+			source.addEventListener('greeting', function(event) {
+		        var data = JSON.parse(event.data);
+		        if (data.message == 100 ){
+		        	_("status").innerHTML = "File processed and stored successfully.";
+			  		_("progressBar").value = 100;
+			  		}
+			  	else{
+			  		var percent = data.message;
+			  		_("progressBar").value = Math.round(percent);
+			  		_("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+		  		}
+		    }, false);
+
+			function _(el) {
+		  		return document.getElementById(el);
+			}
+
+		</script>
+	
+	</div>
+
+</body>

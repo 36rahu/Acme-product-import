@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css">
+    <script type="text/javascript">
+
+      $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var filter_status = $('#status').val();
+            var status = data[3];
+            if (( status == filter_status )||
+                ( filter_status == '')) {
+                return true;
+                }
+                return false;
+            }
+      );
+
+      $(document).ready(function() {
+        var table = $('#myTable').DataTable( {
+            "processing": true,
+            "ajax": {
+                url: "/products_list/", 
+                dataSrc: "data"
+            },
+            "scrollY": 500,
+            "deferRender": true,
+            "scroller": true,
+            "columns": [
+                {data: "sku"},
+                {data: "name"},
+                {data: "description"},
+                {data: "status"},
+                {data: "edit_link"}]
+                });
+        
+        $('#status').on('change', function() {
+            table.draw();
+          } );
+
+      });
+
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h3>ACME Product list</h3>
+
+      <select class="custom-select" name="status" id="status">
+        <option selected value="ACTIVE"></option>
+        <option value="ACTIVE">ACTIVE</option>
+        <option value="INACTIVE">INACTIVE</option>
+      </select>
+
+      <table id="myTable" class="ui celled table" style="width:100%">
+              <thead>
+                <tr>
+              <th>SKU</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Edit</th>
+            </tr>
+          </thead> 
+      </table>
+  </div>
+  </body>
+</html>
