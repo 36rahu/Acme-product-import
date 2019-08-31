@@ -36,5 +36,6 @@ def insert_value_in_model(filename):
             percent = round(((k)*split_value/float(len(df)))*100,2)
             logger.info('percent : {}'.format(percent))
             sse.publish({"message": percent}, type='greeting')
+        sse.publish({"message": 100}, type='greeting')
     logger.info('celery stopped.....')
     return 'Test'

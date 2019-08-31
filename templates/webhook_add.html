@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Add a new webhook</h3>
+      <form method="post" action="/webhook/add/">
+        <div class="form-group col-sm-8">
+          <label for="exampleFormControlInput1">Event</label>
+          <select class="custom-select" name="event" required>
+            <option selected value="add_product">Add product</option>
+            <option value="edit_product">Update Product</option>
+            <option value="delete_all_products">Delete all product</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-8">
+          <label for="exampleFormControlInput1">Host name</label>
+          <input type="text" class="form-control" id="host" placeholder="Host name" name="host" required>
+        </div>
+        <div class="form-group col-sm-8">
+          <label for="exampleFormControlInput1">Endpoint</label>
+          <input type="text" class="form-control" id="endpint" placeholder="Endpoint" name="endpoint" required>
+        </div>
+        <div class="form-group col-sm-8">
+          <label for="exampleFormControlInput1">Method</label>
+          <select class="custom-select" name="method" required>
+            <option selected value="POST">POST</option>
+            <option value="GET">GET</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-8">
+          <label for="exampleFormControlInput1">Extra payload</label>
+          <input type="text" class="form-control" id="extra_payload" placeholder="Extra payload in json structure" name="extra_paylod" required>
+        </div>
+        <div class="form-group col-sm-8">
+          <button type="submit" class="btn btn-primary" value="submit">Submit</button>
+        </div>
+      </form>
+      <div class="form-group col-sm-8">
+        <p>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+          {% endwith %}
+        </p>
+      </div>
+  </div>
+  </body>
+</html>
