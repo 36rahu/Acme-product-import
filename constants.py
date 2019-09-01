@@ -6,7 +6,7 @@ __author__ = 'Rahul K P'
 ACTIVE = 'ACTIVE'
 INACTIVE = 'INACTIVE'
 ALLOWED_EXTENSIONS = set(['csv'])
-UPLOAD_FOLDER = 'uploads/'
+UPLOAD_FOLDER = '/tmp/'
 SPLIT_CON = 500
 PER_PAGE = 100
 EDIT_LINK = '<a href="/product/edit/{}/">Edit</a>'
