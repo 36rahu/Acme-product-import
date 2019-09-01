@@ -10,7 +10,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = '57b4bb9fc9b57a242b22f140f5e102fc4b7bdc821782b3dd'
-    SQLALCHEMY_DATABASE_URI = os.environ['DB_URL']
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     REDIS_URL = os.environ['REDIS_URL']
     CELERY_BROKER_URL = os.environ['REDIS_URL_WITH_PORT']
     CELERY_RESULT_BACKEND = os.environ['REDIS_URL_WITH_PORT']
