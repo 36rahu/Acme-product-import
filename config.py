@@ -12,8 +12,8 @@ class Config(object):
     SECRET_KEY = '57b4bb9fc9b57a242b22f140f5e102fc4b7bdc821782b3dd'
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     REDIS_URL = os.environ['REDIS_URL']
-    CELERY_BROKER_URL = os.environ['REDIS_URL_WITH_PORT']
-    CELERY_RESULT_BACKEND = os.environ['REDIS_URL_WITH_PORT']
+    CELERY_BROKER_URL = os.environ['REDIS_URL']
+    CELERY_RESULT_BACKEND = os.environ['REDIS_URL']
 
 class ProductionConfig(Config):
     DEBUG = False
