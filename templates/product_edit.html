@@ -9,48 +9,56 @@
       <h3>Update new product</h3>
       {% if data %}
       <form method="post" action="/product/edit/{{ data.sku }}/">
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-8">
           <label for="exampleFormControlInput1">SKU</label>
           <input type="text" class="form-control" id="sku" placeholder="SKU" name="sku" value="{{ data.sku }}" readonly>
         </div>
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-8">
           <label for="exampleFormControlInput1">Name</label>
           <input type="text" class="form-control" id="name" placeholder="Name" name="name" value="{{ data.name }}">
         </div>
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-8">
           <label for="exampleFormControlInput1">Description</label>
           <input type="text" class="form-control" id="description" placeholder="Description" name="description" value="{{ data.description }}">
         </div>
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-8">
           <label for="exampleFormControlInput1">Status</label>
-          <input type="text" class="form-control" id="status" placeholder="Status" name="status" value="{{ data.status }}">
+          <select class="custom-select" name="status" required>
+            <option selected value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+          </select>
         </div>
-        <button type="submit" class="btn btn-primary" value="submit">Submit</button>
+        <div class="form-group col-sm-8">
+          <button type="submit" class="btn btn-primary" value="submit">Submit</button>
+        </div>
       </form>
       {% endif %}
-      <p>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-          <ul class=flashes>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-          </ul>
-          {% endif %}
-        {% endwith %}
-      </p>
-
-      <div class="sameline">
-      <a href="/">Home</a>
-      <p> | </p>
-      <a href="/products/">Products</a>
-      <p> | </p>
-      <a href="/products/add/">Add Products</a>
-      <p> | </p>
-      <a href="/products/delete/">Delete all products</a>
-      <p> | </p>
-      <a href="/webhook/add/">Add webhook</a>
-    </div>
+      <div class="form-group col-sm-8">
+        <p>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+          {% endwith %}
+        </p>
+      </div>
+      <div class="form-group col-sm-8">
+        <div class="sameline">
+          <a href="/">Home</a>
+          <p> | </p>
+          <a href="/products/">Products</a>
+          <p> | </p>
+          <a href="/products/add/">Add Product</a>
+          <p> | </p>
+          <a href="/products/delete/">Delete all products</a>
+          <p> | </p>
+          <a href="/webhook/add/">Add webhook</a>
+        </div>
+      </div>
     <style type="text/css">
       .sameline a, .sameline p {
             display: inline;
