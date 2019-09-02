@@ -49,12 +49,8 @@
 			<progress id="progressBar" value="0" max="100" style="width:350px;"></progress>
 		  	<h3 id="status"></h3>
 		</form>
- 
-
 		<script type="text/javascript">
-			
 			var source = new EventSource("{{ url_for('sse.stream') }}");
-
 			source.addEventListener('greeting', function(event) {
 		        var data = JSON.parse(event.data);
 		        if (data.message == 100 ){
@@ -67,13 +63,29 @@
 			  		_("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
 		  		}
 		    }, false);
-
 			function _(el) {
 		  		return document.getElementById(el);
 			}
-
 		</script>
-	
+		<div class="sameline">
+			<a href="/">Home</a>
+			<p> | </p>
+			<a href="/products/">Products</a>
+			<p> | </p>
+			<a href="/products/add/">Add Products</a>
+			<p> | </p>
+			<a href="/products/delete/">Delete all products</a>
+			<p> | </p>
+			<a href="/webhook/add/">Add webhook</a>
+		</div>
+		<style type="text/css">
+			.sameline a, .sameline p {
+				    display: inline;
+				    vertical-align: top;
+				    font-size: 16px;
+				    line-height: 28px;    
+				}
+		</style>
 	</div>
 
 </body>

@@ -12,6 +12,18 @@ from constants import EDIT_WEBHOOK_EVENT
 webhook_manager = WebhookManager()
 
 def add_product(product_dict):
+    """Method to add product to the model.
+
+    It's create a product if the sku not exits in the database. Else it 
+    will update the exitsing one. After the successfull create / update
+    function will trigger a webhook call.
+
+    Args:
+        product_dict (dict): It's a dictionary with all products info.
+
+    Returns:
+        Returns a dictionary with status and message.
+    """
     try:
         product = Products.query.filter(Products.sku == product_dict['sku']).first()
         if product:
@@ -47,6 +59,13 @@ def add_product(product_dict):
         return {'status': 'FAILED', 'msg': 'Could not create product'}
 
 def delete_all_products():
+    """Method to delete all products in the products table.
+
+    Aftser the successfull deletion function will trigger a webhook call.
+
+    Returns:
+        Returns a dictionary with status and message.
+    """
     try:
         num_rows_deleted = db.session.query(Products).delete()
         db.session.commit()

@@ -1,20 +1,32 @@
 
 from os import path
-from celery import Celery
 import pandas as pd
 import numpy as np
 from celery.utils.log import get_task_logger
+from celery import Celery
 
 from app import app, db, sse
-from constants import UPLOAD_FOLDER, SPLIT_CON
+from constants import SPLIT_CON
 from models import Products
 
+# Setup Celery
 logger = get_task_logger(__name__)
 celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
 
+
 @celery.task
 def insert_value_in_model(data):
+    """Method to insert products into database using celery.
+
+    It's also send real time update to the frontend using SSE
+
+    Args:
+        data (dict): It's a dictionary created with pandas
+
+    Returns:
+        Returns 'completed'.
+    """
     logger.info('celery started.....')
     with app.app_context():
         df = pd.read_json(data, orient='index')
@@ -36,4 +48,4 @@ def insert_value_in_model(data):
             sse.publish({"message": percent}, type='greeting')
         sse.publish({"message": 100}, type='greeting')
     logger.info('celery stopped.....')
-    return 'Test'
+    return 'Completed'
