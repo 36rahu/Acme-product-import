@@ -14,11 +14,11 @@ celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
 
 @celery.task
-def insert_value_in_model():
+def insert_value_in_model(data):
     logger.info('celery started.....')
-    df = pd.read_pickle('products.pkl')
-    split_value = len(df) / SPLIT_CON
     with app.app_context():
+        df = pd.read_json(data, orient='index')
+        split_value = len(df) / SPLIT_CON
         sse.publish({"message": 0}, type='greeting')
         for k,g in df.groupby(np.arange(len(df))//split_value):
             for index, row in g.iterrows():

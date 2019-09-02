@@ -36,11 +36,12 @@ def upload_file():
             return redirect('/')
         if file and allowed_file(file.filename):
             data = file.read().decode("utf-8")
+            app.logger.info("Data start :{}".format(data[:100]))
             df = pd.read_csv(StringIO(data), sep=",", index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
-            df.to_pickle('products.pkl')
-            flash('File verified and start processing. {}'.format(data[:10]))
+            data_json = df.to_json(orient='index')
+            flash('File verified and start processing.')
             # Celery task to send the relatime status
-            task = insert_value_in_model.apply_async()
+            task = insert_value_in_model.apply_async(args=[data_json])
             return redirect('/')
         else:
             flash('Only CSV file allowed.')
