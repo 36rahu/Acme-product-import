@@ -32,9 +32,11 @@ class WebhookManager:
         """
         webhooks = Webhooks.query.filter(Webhooks.event == event).all()
         for webhook in webhooks:
-            if isinstance(webhook.extra_paylod, str):
-                payload.update(json.loads(webhook.extra_paylod))
-            payload.update(webhook.extra_paylod)
+            if webhook.extra_paylod:
+                if isinstance(webhook.extra_paylod, str) and eval(webhook.extra_paylod):
+                    payload.update(json.loads(webhook.extra_paylod))
+                elif isinstance(webhook.extra_paylod, dict):
+                    payload.update(webhook.extra_paylod)
             self.triger_webhook(webhook.host, webhook.method, webhook.endpoint, payload)
 
     def create_webhook(self, webhook_dict):

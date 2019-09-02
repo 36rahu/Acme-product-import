@@ -7,7 +7,7 @@ from datetime import datetime
 from app import db
 from models import Products
 from webhook_manager import WebhookManager
-from constants import EDIT_WEBHOOK_EVENT
+from constants import EDIT_WEBHOOK_EVENT, ADD_WEBHOOK_EVENT, DELETE_WEBHOOK_EVENT
 
 webhook_manager = WebhookManager()
 
