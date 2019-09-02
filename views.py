@@ -9,6 +9,7 @@ from app import app, db
 from celery_task import insert_value_in_model
 import pandas as pd
 import numpy as np
+from io import StringIO
 
 from constants import EDIT_LINK
 from utils import allowed_file
@@ -34,12 +35,12 @@ def upload_file():
             flash('No file selected for uploading')
             return redirect('/')
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            flash('File successfully uploaded')
+            data = file.read().decode("utf-8")
+            df = pd.read_csv(StringIO(data), sep=",", index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
+            df.to_pickle('products.pkl')
+            flash('File verified and start processing.')
             # Celery task to send the relatime status
-            task = insert_value_in_model.apply_async(args=[file_path])
+            task = insert_value_in_model.apply_async()
             return redirect('/')
         else:
             flash('Only CSV file allowed.')

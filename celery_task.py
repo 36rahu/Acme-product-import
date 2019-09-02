@@ -14,11 +14,9 @@ celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
 
 @celery.task
-def insert_value_in_model(filename):
+def insert_value_in_model():
     logger.info('celery started.....')
-    logger.info('File path : {}'.format(filename))
-    logger.info('Is exists : {}'.format(path.exists(filename)))
-    df = pd.read_csv(filename, index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
+    df = pd.read_pickle('products.pkl')
     split_value = len(df) / SPLIT_CON
     with app.app_context():
         sse.publish({"message": 0}, type='greeting')
