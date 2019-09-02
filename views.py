@@ -38,7 +38,7 @@ def upload_file():
             data = file.read().decode("utf-8")
             df = pd.read_csv(StringIO(data), sep=",", index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
             df.to_pickle('products.pkl')
-            flash('File verified and start processing.')
+            flash('File verified and start processing. '.format(data[:10]))
             # Celery task to send the relatime status
             task = insert_value_in_model.apply_async()
             return redirect('/')
