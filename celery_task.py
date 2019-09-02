@@ -16,7 +16,7 @@ celery.conf.update(app.config)
 @celery.task
 def insert_value_in_model():
     logger.info('celery started.....')
-    df = pd.read_pickle('products.pkl')
+    df = pd.read_pickle('products.pkl', compression='bz2')
     split_value = len(df) / SPLIT_CON
     with app.app_context():
         sse.publish({"message": 0}, type='greeting')
