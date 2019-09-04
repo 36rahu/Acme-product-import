@@ -1,6 +1,8 @@
 from time import sleep
 import os
 from os import path
+import boto3
+import json
 import urllib.request
 from flask import Flask, flash, request, redirect, render_template, Blueprint, jsonify
 from werkzeug.utils import secure_filename
@@ -27,25 +29,27 @@ def upload_form():
 @views.route('/upload/', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            flash('No file selected for uploading')
-            return redirect('/')
-        if file and allowed_file(file.filename):
-            data = file.read().decode("utf-8")
-            app.logger.info("Data start :{}".format(data[:100]))
-            df = pd.read_csv(StringIO(data), sep=",", index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
-            data_json = df.to_json(orient='index')
-            flash('File verified and start processing.')
-            # Celery task to send the relatime status
-            task = insert_value_in_model.apply_async(args=[data_json])
-            return redirect('/')
-        else:
-            flash('Only CSV file allowed.')
-            return redirect('/')
+        # if 'file' not in request.files:
+        #     flash('No file part')
+        #     return redirect(request.url)
+        avatar_url = request.form["selected_file"]
+        print(avatar_url)
+        # file = request.files['file']
+        # if file.filename == '':
+        #     flash('No file selected for uploading')
+        #     return redirect('/')
+        # if file and allowed_file(file.filename):
+        #     data = file.read().decode("utf-8")
+        #     app.logger.info("Data start :{}".format(data[:100]))
+        #     df = pd.read_csv(StringIO(data), sep=",", index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
+        #     data_json = df.to_json(orient='index')
+        #     flash('File verified and start processing.')
+        #     # Celery task to send the relatime status
+        #     task = insert_value_in_model.apply_async(args=[data_json])
+        #     return redirect('/')
+        # else:
+        #     flash('Only CSV file allowed.')
+        return redirect('/')
 
 @views.route('/products_list/')
 def get_products_list():
@@ -102,5 +106,28 @@ def add_webhook():
         webhook_manager.create_webhook(request.form)
         flash('webhook creeated')
     return render_template('webhook_add.html')
+
+@views.route('/sign_s3/')
+def sign_s3():
+    S3_BUCKET = os.environ.get('S3_BUCKET')
+    file_name = request.args.get('file_name')
+    file_type = request.args.get('file_type')
+
+    s3 = boto3.client('s3')
+    presigned_post = s3.generate_presigned_post(
+        Bucket = S3_BUCKET,
+        Key = file_name,
+        Fields = {"acl": "public-read", "Content-Type": file_type},
+        Conditions = [
+            {"acl": "public-read"},
+            {"Content-Type": file_type}
+            ],
+        ExpiresIn = 3600
+    )
+    print(presigned_post)
+    return json.dumps({
+        'data': presigned_post,
+        'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
+        })
 
 
