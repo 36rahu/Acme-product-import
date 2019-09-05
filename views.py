@@ -32,8 +32,8 @@ def upload_file():
         # if 'file' not in request.files:
         #     flash('No file part')
         #     return redirect(request.url)
-        avatar_url = request.form["input_file"]
-        print(avatar_url)
+        file_url = request.form["input_file"]
+        print(file_url)
         # file = request.files['file']
         # if file.filename == '':
         #     flash('No file selected for uploading')
@@ -44,8 +44,8 @@ def upload_file():
         #     df = pd.read_csv(StringIO(data), sep=",", index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
         #     data_json = df.to_json(orient='index')
         #     flash('File verified and start processing.')
-        #     # Celery task to send the relatime status
-        #     task = insert_value_in_model.apply_async(args=[data_json])
+        # Celery task to send the relatime status
+        task = insert_value_in_model.apply_async(args=[file_url])
         #     return redirect('/')
         # else:
         #     flash('Only CSV file allowed.')

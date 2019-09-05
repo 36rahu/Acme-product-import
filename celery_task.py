@@ -28,8 +28,9 @@ def insert_value_in_model(data):
         Returns 'completed'.
     """
     logger.info('celery started.....')
-    with app.app_context():
-        df = pd.read_json(data, orient='index')
+    with app.app_context(file_url):
+        df = pd.read_csv(file_url, index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
+        # df = pd.read_json(data, orient='index')
         split_value = len(df) / SPLIT_CON
         sse.publish({"message": 0}, type='greeting')
         for k,g in df.groupby(np.arange(len(df))//split_value):
