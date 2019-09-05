@@ -32,7 +32,7 @@ def upload_file():
         # if 'file' not in request.files:
         #     flash('No file part')
         #     return redirect(request.url)
-        avatar_url = request.form["selected_file"]
+        avatar_url = request.form["input_file"]
         print(avatar_url)
         # file = request.files['file']
         # if file.filename == '':
