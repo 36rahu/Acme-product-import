@@ -16,7 +16,7 @@ celery.conf.update(app.config)
 
 
 @celery.task
-def insert_value_in_model(data):
+def insert_value_in_model(file_url):
     """Method to insert products into database using celery.
 
     It's also send real time update to the frontend using SSE
@@ -28,7 +28,7 @@ def insert_value_in_model(data):
         Returns 'completed'.
     """
     logger.info('celery started.....')
-    with app.app_context(file_url):
+    with app.app_context():
         df = pd.read_csv(file_url, index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
         # df = pd.read_json(data, orient='index')
         split_value = len(df) / SPLIT_CON
