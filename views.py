@@ -29,26 +29,9 @@ def upload_form():
 @views.route('/upload/', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
-        # if 'file' not in request.files:
-        #     flash('No file part')
-        #     return redirect(request.url)
         file_url = request.form["input_file"]
-        print(file_url)
-        # file = request.files['file']
-        # if file.filename == '':
-        #     flash('No file selected for uploading')
-        #     return redirect('/')
-        # if file and allowed_file(file.filename):
-        #     data = file.read().decode("utf-8")
-        #     app.logger.info("Data start :{}".format(data[:100]))
-        #     df = pd.read_csv(StringIO(data), sep=",", index_col='sku', names=['name', 'sku', 'description'], skiprows=1)
-        #     data_json = df.to_json(orient='index')
-        #     flash('File verified and start processing.')
-        # Celery task to send the relatime status
+        # Celery task start
         task = insert_value_in_model.apply_async(args=[file_url])
-        #     return redirect('/')
-        # else:
-        #     flash('Only CSV file allowed.')
         return redirect('/')
 
 @views.route('/products_list/')
